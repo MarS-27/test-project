@@ -8,6 +8,7 @@ import {
 import { Users } from "@/models/models";
 import UserCard from "@/components/cards/UserCard";
 import { GetServerSidePropsContext } from "next";
+import Layout from "@/layout/Layout";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
@@ -34,14 +35,16 @@ export async function getServerSideProps(
 
 export default function UsersList({ users }: { users: Users }) {
   return (
-    <section className="grid-content py-5 h-full flex flex-col justify-between text-stone-800">
-      <SearchForm />
-      <ul className="grid grid-cols-5 gap-3">
-        {users.map((user) => (
-          <UserCard key={user.id} user={user} />
-        ))}
-      </ul>
-      <Pagination />
-    </section>
+    <Layout>
+      <section className="grid-content py-5 flex flex-col justify-between gap-16 text-stone-800">
+        <SearchForm />
+        <ul className="grid grid-cols-5 gap-3">
+          {users.map((user) => (
+            <UserCard key={user.id} user={user} />
+          ))}
+        </ul>
+        <Pagination />
+      </section>
+    </Layout>
   );
 }
