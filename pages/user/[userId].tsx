@@ -1,13 +1,13 @@
 import Image from "next/image";
 import { BASE_URL } from "@/constants/constants";
-import { IUserFullInfo } from "@/models/models";
+import { UserFullInfo } from "@/types/types";
 import { GetServerSidePropsContext } from "next";
 import Layout from "@/layout/Layout";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<{
-  props: { user: IUserFullInfo };
+  props: { user: UserFullInfo };
 }> {
   const { query } = context;
 
@@ -23,7 +23,7 @@ export async function getServerSideProps(
   };
 }
 
-export default function User({ user }: { user: IUserFullInfo }) {
+export default function User({ user }: { user: UserFullInfo }) {
   return (
     <Layout>
       <section className="grid-content py-5 text-stone-800 mx-auto w-4/5 gap-5 flex justify-around items-center text-2xl">

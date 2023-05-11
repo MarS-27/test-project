@@ -1,11 +1,11 @@
-export interface IUserShortInfo {
+export type UserShortInfo = {
   id: number;
   firstName: string;
   lastName: string;
   image: string;
-}
+};
 
-export interface IUserFullInfo {
+export type UserFullInfo = {
   id: number;
   firstName: string;
   lastName: string;
@@ -65,6 +65,15 @@ export interface IUserFullInfo {
   ein: string;
   ssn: string;
   userAgent: string;
-}
+};
 
-export type Users = IUserShortInfo[];
+export type Users = UserShortInfo[];
+
+type Route = {
+  name: string;
+  path: string;
+};
+
+export type StaticRoutes = {
+  [key: string]: Route;
+};

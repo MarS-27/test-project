@@ -1,11 +1,11 @@
 import Pagination from "@/components/pagination/Pagination";
-import SearchForm from "@/components/forms/SearchForm";
+import SearchWidget from "@/components/search/SearchWidget";
 import {
   BASE_URL,
   USERS_LIMIT,
   USERS_SELECT_PARAMS,
 } from "@/constants/constants";
-import { Users } from "@/models/models";
+import { Users } from "@/types/types";
 import UserCard from "@/components/cards/UserCard";
 import { GetServerSidePropsContext } from "next";
 import Layout from "@/layout/Layout";
@@ -37,7 +37,7 @@ export default function UsersList({ users }: { users: Users }) {
   return (
     <Layout>
       <section className="grid-content py-5 flex flex-col justify-between gap-16 text-stone-800">
-        <SearchForm />
+        <SearchWidget />
         <ul className="grid grid-cols-5 gap-3">
           {users.map((user) => (
             <UserCard key={user.id} user={user} />

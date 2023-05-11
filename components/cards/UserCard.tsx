@@ -1,9 +1,9 @@
-import { IUserShortInfo } from "@/models/models";
+import { UserShortInfo } from "@/types/types";
 import Image from "next/image";
 import Link from "next/link";
 
 type User = {
-  user: IUserShortInfo;
+  user: UserShortInfo;
 };
 
 export default function UserCard({ user }: User) {
