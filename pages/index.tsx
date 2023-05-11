@@ -1,12 +1,10 @@
 import Image from "next/image";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import Layout from "@/layout/Layout";
 
 export default function Home() {
   return (
-    <main>
-      <p>Hello world</p>
-    </main>
+    <Layout>
+      <p className="grid-content">Hello world</p>
+    </Layout>
   );
 }
