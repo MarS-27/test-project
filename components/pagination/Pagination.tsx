@@ -2,6 +2,7 @@ import { PAGINATION_DOTS } from '@/constants/constants';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { PaginationButton } from '../buttons/PaginationButton';
 
 export const Pagination = ({ pagesCount }: { pagesCount: number }) => {
   const { query } = useRouter();
@@ -54,11 +55,13 @@ export const Pagination = ({ pagesCount }: { pagesCount: number }) => {
   }, [activePage]);
 
   return (
-    <ul className="flex gap-1 justify-center">
-      {activePaginationTemplate.map((item, i) => (
-        <li
-          key={Math.random() + i}
-          className={`
+    <div className="flex justify-center gap-3">
+      <PaginationButton btnType="prev" activePage={activePage} />
+      <ul className="flex gap-1 justify-center">
+        {activePaginationTemplate.map((item, i) => (
+          <li
+            key={Math.random() + i}
+            className={`
             ${activePage === item ? 'bg-teal-300' : 'bg-slate-100'}
             ${
               item === PAGINATION_DOTS
@@ -66,27 +69,29 @@ export const Pagination = ({ pagesCount }: { pagesCount: number }) => {
                 : 'w-8 h-7 border-2 border-gray-700 rounded-md hover:bg-teal-300'
             }
            `}
-        >
-          {item === PAGINATION_DOTS ? (
-            <p className="font-bold px-1 text-xl tracking-[1.5px]">
-              {PAGINATION_DOTS}
-            </p>
-          ) : (
-            <Link
-              href={`/users/${item}`}
-              className="
+          >
+            {item === PAGINATION_DOTS ? (
+              <p className="font-bold px-1 text-xl tracking-[1.5px]">
+                {PAGINATION_DOTS}
+              </p>
+            ) : (
+              <Link
+                href={`/users/${item}`}
+                className="
                 w-full 
                 h-full
                 flex 
                 items-center 
                 justify-center 
               "
-            >
-              {item}
-            </Link>
-          )}
-        </li>
-      ))}
-    </ul>
+              >
+                {item}
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+      <PaginationButton btnType="next" activePage={activePage} />
+    </div>
   );
 };
