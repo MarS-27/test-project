@@ -1,12 +1,12 @@
-import { ReactNode } from "react";
-import Head from "next/head";
-import Header from "../components/header/Header";
+import { ReactNode } from 'react';
+import Head from 'next/head';
+import { Header } from '../components/header/Header';
 
 type Props = {
   children?: ReactNode;
 };
 
-export default function Layout({ children }: Props) {
+export const Layout = ({ children }: Props) => {
   return (
     <>
       <Head>
@@ -19,4 +19,4 @@ export default function Layout({ children }: Props) {
       <main className="grid-container">{children}</main>
     </>
   );
-}
+};

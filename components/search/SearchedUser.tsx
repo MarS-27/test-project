@@ -1,7 +1,7 @@
-import { UserFullInfo } from "@/types/types";
-import Link from "next/link";
+import { UserFullInfo } from '@/types/types';
+import Link from 'next/link';
 
-export default function SearchResults({ user }: { user: UserFullInfo }) {
+export const SearchedUser = ({ user }: { user: UserFullInfo }) => {
   return (
     <li
       className="
@@ -23,4 +23,4 @@ export default function SearchResults({ user }: { user: UserFullInfo }) {
       </Link>
     </li>
   );
-}
+};

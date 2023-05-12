@@ -3,12 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --min-width: 375px;
+  --min-width: 320px;
   --max-width: 1200px;
 }
 
 body > div {
   min-height: 100vh;
+}
+
+.user-info span {
+  font-weight: 700;
 }
 
 @layer components {

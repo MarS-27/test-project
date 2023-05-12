@@ -1,15 +1,18 @@
-import Link from "next/link";
-import Layout from "@/layout/Layout";
+import Link from 'next/link';
+import { STATIC_ROUTES } from '@/constants/constants';
+import { Layout } from '@/layout/Layout';
 
-export default function Home() {
+const Home = () => {
   return (
     <Layout>
       <Link
-        href="/users/1"
-        className="grid-content text-center text-5xl hover:text-teal-300"
+        href={STATIC_ROUTES.users.path}
+        className="grid-content text-center text-8xl hover:text-teal-300 mt-24"
       >
         Go to users
       </Link>
     </Layout>
   );
-}
+};
+
+export default Home;

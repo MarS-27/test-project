@@ -1,7 +1,7 @@
-import { STATIC_ROUTES } from "@/constants/constants";
-import Link from "next/link";
+import { STATIC_ROUTES } from '@/constants/constants';
+import Link from 'next/link';
 
-export default function Navigation() {
+export const Navigation = () => {
   const routesNames = Object.keys(STATIC_ROUTES);
 
   return (
@@ -20,4 +20,4 @@ export default function Navigation() {
       </ul>
     </nav>
   );
-}
+};

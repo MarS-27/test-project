@@ -1,12 +1,8 @@
-import { UserShortInfo } from "@/types/types";
-import Image from "next/image";
-import Link from "next/link";
+import { UserShortInfo } from '@/types/types';
+import Image from 'next/image';
+import Link from 'next/link';
 
-type User = {
-  user: UserShortInfo;
-};
-
-export default function UserCard({ user }: User) {
+export const UserCard = ({ user }: { user: UserShortInfo }) => {
   return (
     <li
       className="
@@ -40,4 +36,4 @@ export default function UserCard({ user }: User) {
       </Link>
     </li>
   );
-}
+};
