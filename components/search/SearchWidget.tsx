@@ -1,5 +1,4 @@
-import { BASE_URL } from '@/constants/constants';
-import { ChangeEvent, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UserFullInfo } from '@/types/types';
 import { SearchedUser } from './SearchedUser';
 
@@ -7,67 +6,43 @@ export const SearchWidget = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchedUsers, setSearchedUsers] = useState<UserFullInfo[]>([]);
 
-  const cityHandleInput = async (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+  const fetchUsers = async () => {
+    const res = await fetch(
+      `https://dummyjson.com/users/search?q=${searchValue}`,
+    );
 
-    if (searchValue.length >= 1) {
-      const res = await fetch(`${BASE_URL}/search?q=${searchValue}`);
-
-      if (!res.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const users = await res.json().then((data) => data.users);
-
-      setSearchedUsers(users);
-    } else {
-      setSearchedUsers([]);
+    if (!res.ok) {
+      throw new Error('Failed to fetch data');
     }
+    const users = await res.json().then((data) => data.users);
+
+    setSearchedUsers(users);
   };
+
+  useEffect(() => {
+    searchValue ? fetchUsers() : setSearchedUsers([]);
+  }, [searchValue]);
 
   return (
     <div className="flex justify-center items-center relative">
       <input
-        className="
-          w-2/5
-          p-2
-          border-slate-700
-          border-2 
-          rounded-lg
-          bg-slate-100
-          outline-cyan-500
-          placeholder:text-stone-500
-        "
+        className=" w-2/5 p-2 border-slate-700 border-2 rounded-lg bg-slate-100 outline-cyan-500 placeholder:text-stone-500"
         type="text"
         value={searchValue}
-        onChange={cityHandleInput}
+        onChange={(e) => setSearchValue(e.target.value.trimStart())}
         placeholder="Search user"
       />
-      {searchValue.length > 1 && (
-        <ul
-          className="
-            absolute 
-            top-[110%] 
-            w-2/5 
-            bg-slate-400 
-            z-50 
-            rounded-lg 
-            max-h-52 
-            overflow-y-scroll 
-            p-5 
-            flex
-            flex-col
-            gap-2
-          "
-        >
+      {searchValue ? (
+        <div className="absolute top-[110%] w-2/5 bg-slate-400 z-50 rounded-lg max-h-52 overflow-y-scroll p-5 flex flex-col gap-2">
           {searchedUsers.length ? (
             searchedUsers.map((user) => (
               <SearchedUser key={user.id} user={user} />
             ))
           ) : (
-            <li>User not found!</li>
+            <p>User not found!</p>
           )}
-        </ul>
-      )}
+        </div>
+      ) : null}
     </div>
   );
 };

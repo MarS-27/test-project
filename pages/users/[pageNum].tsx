@@ -1,11 +1,5 @@
 import { Pagination } from '@/components/pagination/Pagination';
 import { SearchWidget } from '@/components/search/SearchWidget';
-import {
-  BASE_URL,
-  USERS_LIMIT,
-  USERS_SELECT_PARAMS,
-  MAX_USERS,
-} from '@/constants/constants';
 import { Users } from '@/types/types';
 import { UserCard } from '@/components/cards/UserCard';
 import { GetServerSidePropsContext } from 'next';
@@ -14,20 +8,18 @@ import { useMemo } from 'react';
 
 type UsersListProps = { usersOnPage: Users; usersAll: Users };
 
-export async function getServerSideProps(
+export const getServerSideProps = async (
   context: GetServerSidePropsContext,
-): Promise<{
-  props: UsersListProps;
-}> {
+) => {
   const { query } = context;
   const pageNum = parseInt(query.pageNum as string);
   const skipedUsers = (pageNum - 1) * 10;
 
   const resUsersOnPage = await fetch(
-    `${BASE_URL}?limit=${USERS_LIMIT}&skip=${skipedUsers}&select=${USERS_SELECT_PARAMS}`,
+    `https://dummyjson.com/users?limit=10&skip=${skipedUsers}&select=firstName,lastName,image`,
   );
   const resAllUsers = await fetch(
-    `${BASE_URL}?limit=${MAX_USERS}&select=${USERS_SELECT_PARAMS}`,
+    'https://dummyjson.com/users?limit=500&select=firstName,lastName,image',
   );
 
   if (!resUsersOnPage.ok || !resAllUsers.ok) {
@@ -40,22 +32,22 @@ export async function getServerSideProps(
   return {
     props: { usersOnPage, usersAll },
   };
-}
+};
 
-const UsersList = ({ usersOnPage, usersAll }: UsersListProps) => {
+const UsersList: React.FC<UsersListProps> = ({ usersOnPage, usersAll }) => {
   const pagesCount = useMemo(() => {
-    return Math.ceil(usersAll.length / parseInt(USERS_LIMIT));
+    return Math.ceil(usersAll.length / 10);
   }, [usersAll.length]);
 
   return (
     <Layout>
-      <section className="grid-content py-5 flex flex-col justify-between gap-16 text-stone-800">
+      <section className="grid-content flex flex-col justify-between gap-16 text-stone-800">
         <SearchWidget />
-        <ul className="grid grid-cols-5 gap-3 max-[880px]:grid-cols-4 max-sm:grid-cols-2">
+        <div className="grid grid-cols-5 gap-3 max-[880px]:grid-cols-4 max-sm:grid-cols-2">
           {usersOnPage.map((user) => (
             <UserCard key={user.id} user={user} />
           ))}
-        </ul>
+        </div>
         <Pagination pagesCount={pagesCount} />
       </section>
     </Layout>

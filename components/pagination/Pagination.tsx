@@ -1,97 +1,50 @@
-import { PAGINATION_DOTS } from '@/constants/constants';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { PaginationButton } from '../buttons/PaginationButton';
+import { getPaginationTemplate } from '@/utils/getPagination';
 
-export const Pagination = ({ pagesCount }: { pagesCount: number }) => {
+type PaginationProps = {
+  pagesCount: number;
+};
+
+export const Pagination: React.FC<PaginationProps> = ({ pagesCount }) => {
   const { query } = useRouter();
   const activePage = parseInt(query.pageNum as string);
-  const [activePaginationTemplate, setActivePaginationTemplate] = useState<
-    (string | number)[]
-  >([]);
-
-  const paginationTemlates = {
-    forFirstAndLastElem: [
-      1,
-      2,
-      3,
-      PAGINATION_DOTS,
-      pagesCount - 2,
-      pagesCount - 1,
-      pagesCount,
-    ],
-    forThirdElem: [1, 2, 3, 4, PAGINATION_DOTS, pagesCount - 1, pagesCount],
-    forLastThirdElem: [
-      1,
-      2,
-      PAGINATION_DOTS,
-      pagesCount - 3,
-      pagesCount - 2,
-      pagesCount - 1,
-      pagesCount,
-    ],
-    forAnotherElem: [
-      1,
-      PAGINATION_DOTS,
-      activePage - 1,
-      activePage,
-      activePage + 1,
-      PAGINATION_DOTS,
-      pagesCount,
-    ],
-  };
-
-  useEffect(() => {
-    if (activePage < 3 || activePage > pagesCount - 2) {
-      setActivePaginationTemplate(paginationTemlates.forFirstAndLastElem);
-    } else if (activePage === 3) {
-      setActivePaginationTemplate(paginationTemlates.forThirdElem);
-    } else if (activePage === pagesCount - 2) {
-      setActivePaginationTemplate(paginationTemlates.forLastThirdElem);
-    } else {
-      setActivePaginationTemplate(paginationTemlates.forAnotherElem);
-    }
-  }, [activePage]);
+  const paginationTemplate = getPaginationTemplate(activePage, pagesCount);
 
   return (
     <div className="flex justify-center gap-3">
-      <PaginationButton btnType="prev" activePage={activePage} />
-      <ul className="flex gap-1 justify-center">
-        {activePaginationTemplate.map((item, i) => (
-          <li
-            key={Math.random() + i}
-            className={`
-            ${activePage === item ? 'bg-teal-300' : 'bg-slate-100'}
-            ${
-              item === PAGINATION_DOTS
-                ? 'text-center bg-transparent'
-                : 'w-8 h-7 border-2 border-gray-700 rounded-md hover:bg-teal-300'
-            }
-           `}
-          >
-            {item === PAGINATION_DOTS ? (
-              <p className="font-bold px-1 text-xl tracking-[1.5px]">
-                {PAGINATION_DOTS}
+      <PaginationButton variant="prev" activePage={activePage} />
+      <div className="flex gap-1 justify-center">
+        {paginationTemplate.map((item, i) => (
+          <>
+            {item === '...' ? (
+              <p
+                key={Math.random() + i}
+                className="font-bold px-1 text-xl tracking-[1.5px]"
+              >
+                ...
               </p>
             ) : (
               <Link
+                key={Math.random() + i}
                 href={`/users/${item}`}
-                className="
-                w-full 
-                h-full
-                flex 
-                items-center 
-                justify-center 
-              "
+                className={clsx(
+                  'flex items-center justify-center w-8 h-7 border-2 border-gray-700 rounded-md hover:bg-teal-300',
+                  {
+                    'bg-teal-300': activePage === item,
+                    'bg-slate-100': activePage !== item,
+                  },
+                )}
               >
                 {item}
               </Link>
             )}
-          </li>
+          </>
         ))}
-      </ul>
-      <PaginationButton btnType="next" activePage={activePage} />
+      </div>
+      <PaginationButton variant="next" activePage={activePage} />
     </div>
   );
 };

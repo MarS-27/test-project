@@ -1,36 +1,31 @@
+import clsx from 'clsx';
 import Link from 'next/link';
 
 type BtnProps = {
-  btnType: 'next' | 'prev';
+  variant: 'next' | 'prev';
   activePage: number;
 };
 
-export const PaginationButton = ({ btnType, activePage }: BtnProps) => {
+export const PaginationButton: React.FC<BtnProps> = ({
+  variant,
+  activePage,
+}) => {
   return (
     <Link
       href={
-        btnType === 'prev'
+        variant === 'prev'
           ? `/users/${activePage - 1}`
           : `/users/${activePage + 1}`
       }
-      className={`
-        ${btnType === 'next' ? 'rotate-180' : ''}
-        ${
-          (btnType === 'prev' && activePage === 1) ||
-          (btnType === 'next' && activePage === 10)
-            ? 'pointer-events-none'
-            : ''
-        }
-        w-10 
-        h-7 
-        border-2 
-        border-gray-700 
-        bg-[url('/arrow.svg')]
-        bg-center
-        bg-cover
-        rounded-full 
-        hover:bg-teal-300
-    `}
+      className={clsx(
+        'w-10 h-7 border-2 border-gray-700 bg-[url("/arrow.svg")] bg-center bg-cover rounded-full hover:bg-teal-300',
+        {
+          'rotate-180': variant === 'next',
+          'pointer-events-none':
+            (variant === 'prev' && activePage === 1) ||
+            (variant === 'next' && activePage === 10),
+        },
+      )}
     />
   );
 };

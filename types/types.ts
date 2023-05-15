@@ -5,6 +5,39 @@ export type UserShortInfo = {
   image: string;
 };
 
+type HairInfo = {
+  color: string;
+  type: string;
+};
+
+type CoordinatesInfo = {
+  lat: number;
+  lng: number;
+};
+
+type AddressInfo = {
+  address: string;
+  city: string;
+  coordinates: CoordinatesInfo;
+  postalCode: string;
+  state: string;
+};
+
+type BankInfo = {
+  cardExpire: string;
+  cardNumber: string;
+  cardType: string;
+  currency: string;
+  iban: string;
+};
+
+type CompanyInfo = {
+  address: AddressInfo;
+  department: string;
+  name: string;
+  title: string;
+};
+
 export type UserFullInfo = {
   id: number;
   firstName: string;
@@ -22,58 +55,17 @@ export type UserFullInfo = {
   height: number;
   weight: number;
   eyeColor: string;
-  hair: {
-    color: string;
-    type: string;
-  };
+  hair: HairInfo;
   domain: string;
   ip: string;
-  address: {
-    address: string;
-    city: string;
-    coordinates: {
-      lat: number;
-      lng: number;
-    };
-    postalCode: string;
-    state: string;
-  };
+  address: AddressInfo;
   macAddress: string;
   university: string;
-  bank: {
-    cardExpire: string;
-    cardNumber: string;
-    cardType: string;
-    currency: string;
-    iban: string;
-  };
-  company: {
-    address: {
-      address: string;
-      city: string;
-      coordinates: {
-        lat: number;
-        lng: number;
-      };
-      postalCode: string;
-      state: string;
-    };
-    department: string;
-    name: string;
-    title: string;
-  };
+  bank: BankInfo;
+  company: CompanyInfo;
   ein: string;
   ssn: string;
   userAgent: string;
 };
 
 export type Users = UserShortInfo[];
-
-type Route = {
-  name: string;
-  path: string;
-};
-
-export type StaticRoutes = {
-  [key: string]: Route;
-};
