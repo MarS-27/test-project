@@ -19,12 +19,11 @@ export const PaginationButton: React.FC<BtnProps> = ({
       }
       className={clsx(
         'w-10 h-7 border-2 border-gray-700 bg-[url("/arrow.svg")] bg-center bg-cover rounded-full hover:bg-teal-300',
-        {
-          'rotate-180': variant === 'next',
-          'pointer-events-none':
-            (variant === 'prev' && activePage === 1) ||
-            (variant === 'next' && activePage === 10),
-        },
+        variant === 'next' ? 'rotate-180' : null,
+        (variant === 'prev' && activePage === 1) ||
+          (variant === 'next' && activePage === 10)
+          ? 'pointer-events-none'
+          : null,
       )}
     />
   );

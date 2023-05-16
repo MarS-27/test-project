@@ -14,9 +14,9 @@ export const SearchWidget = () => {
     if (!res.ok) {
       throw new Error('Failed to fetch data');
     }
-    const users = await res.json().then((data) => data.users);
+    const data = await res.json();
 
-    setSearchedUsers(users);
+    setSearchedUsers(data.users);
   };
 
   useEffect(() => {

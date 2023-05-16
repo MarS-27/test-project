@@ -27,7 +27,7 @@ export const getServerSideProps = async (
 const UserPage: React.FC<UserPageProps> = ({ user }) => {
   return (
     <Layout>
-      <section className="grid-content py-12 text-stone-800 mx-auto gap-10 flex justify-center items-center text-2xl max-[980px]:flex-col max-sm:text-lg">
+      <section className="grid-content py-5 text-stone-800 mx-auto gap-10 flex justify-center items-center text-2xl max-[980px]:flex-col max-sm:text-lg">
         <Image
           src={user.image}
           alt={user.firstName}
