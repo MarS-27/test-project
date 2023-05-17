@@ -1,21 +1,21 @@
-import { Pagination } from '@/components/pagination/Pagination';
-import { SearchWidget } from '@/components/search/SearchWidget';
+import { FC } from 'react';
+import { Pagination } from '@/components/ui/Pagination';
+import { SearchWidget } from '@/components/ui/SearchWidget';
 import { Users } from '@/types/types';
-import { UserCard } from '@/components/cards/UserCard';
-import { GetServerSidePropsContext } from 'next';
+import { UserCard } from '@/components/ui/UserCard';
+import { GetServerSideProps } from 'next';
 import { Layout } from '@/layout/Layout';
 
-type UsersListProps = { users: Users };
+type UsersListProps = { users: Users; pageNum: number };
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const { query } = context;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { query } = ctx;
+
   const pageNum = parseInt(query.pageNum as string);
   const skipedUsers = (pageNum - 1) * 10;
 
   const res = await fetch(
-    `https://dummyjson.com/users?limit=10&skip=${skipedUsers}&select=firstName,lastName,image`,
+    `https://dummyjson.com/users?limit=10&skip=${skipedUsers}`,
   );
 
   if (!res.ok) {
@@ -25,11 +25,11 @@ export const getServerSideProps = async (
   const data = await res.json();
 
   return {
-    props: { users: data.users },
+    props: { users: data.users, pageNum },
   };
 };
 
-const UsersList: React.FC<UsersListProps> = ({ users }) => {
+const UsersList: FC<UsersListProps> = ({ users, pageNum }) => {
   return (
     <Layout>
       <section className="grid-content flex flex-col justify-between gap-14 text-stone-800">
@@ -39,7 +39,7 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
             <UserCard key={user.id} user={user} />
           ))}
         </div>
-        <Pagination />
+        <Pagination activePageNumber={pageNum} />
       </section>
     </Layout>
   );

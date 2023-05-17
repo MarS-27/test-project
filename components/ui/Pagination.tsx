@@ -1,18 +1,23 @@
+import { Fragment, FC } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { PaginationButton } from '../buttons/PaginationButton';
+import { PaginationButton } from './PaginationButton';
 import { getPaginationTemplate } from '@/utils/getPagination';
-import { Fragment } from 'react';
 
-export const Pagination = () => {
-  const { query } = useRouter();
-  const activePage = parseInt(query.pageNum as string);
-  const paginationTemplate = getPaginationTemplate(activePage);
+type PaginationProps = {
+  activePageNumber: number;
+};
+
+export const Pagination: FC<PaginationProps> = ({ activePageNumber }) => {
+  const pagesCount = 10;
+  const paginationTemplate = getPaginationTemplate(
+    activePageNumber,
+    pagesCount,
+  );
 
   return (
     <div className="flex justify-center gap-3">
-      <PaginationButton variant="prev" activePage={activePage} />
+      <PaginationButton variant="prev" activePageNumber={activePageNumber} />
       <div className="flex gap-1 justify-center">
         {paginationTemplate.map((item, i) => (
           <Fragment key={i}>
@@ -23,7 +28,7 @@ export const Pagination = () => {
                 href={`/users/${item}`}
                 className={clsx(
                   'flex items-center justify-center w-8 h-7 border-2 border-gray-700 rounded-md hover:bg-teal-300',
-                  activePage === item
+                  activePageNumber === item
                     ? 'bg-teal-300 pointer-events-none'
                     : 'bg-slate-100',
                 )}
@@ -34,7 +39,7 @@ export const Pagination = () => {
           </Fragment>
         ))}
       </div>
-      <PaginationButton variant="next" activePage={activePage} />
+      <PaginationButton variant="next" activePageNumber={activePageNumber} />
     </div>
   );
 };

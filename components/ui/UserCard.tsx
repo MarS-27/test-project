@@ -1,12 +1,13 @@
-import { UserShortInfo } from '@/types/types';
+import { FC } from 'react';
+import { UserInfo } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
 type UserCardProps = {
-  user: UserShortInfo;
+  user: UserInfo;
 };
 
-export const UserCard: React.FC<UserCardProps> = ({ user }) => {
+export const UserCard: FC<UserCardProps> = ({ user }) => {
   return (
     <Link
       href={`/user/${user.id}`}

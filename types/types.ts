@@ -1,10 +1,3 @@
-export type UserShortInfo = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  image: string;
-};
-
 type HairInfo = {
   color: string;
   type: string;
@@ -38,7 +31,7 @@ type CompanyInfo = {
   title: string;
 };
 
-export type UserFullInfo = {
+export type UserInfo = {
   id: number;
   firstName: string;
   lastName: string;
@@ -68,4 +61,4 @@ export type UserFullInfo = {
   userAgent: string;
 };
 
-export type Users = UserShortInfo[];
+export type Users = UserInfo[];

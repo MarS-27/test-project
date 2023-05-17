@@ -1,26 +1,24 @@
 import { useEffect, useState } from 'react';
-import { UserFullInfo } from '@/types/types';
+import { Users } from '@/types/types';
 import { SearchedUser } from './SearchedUser';
 
 export const SearchWidget = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [searchedUsers, setSearchedUsers] = useState<UserFullInfo[]>([]);
-
-  const fetchUsers = async () => {
-    const res = await fetch(
-      `https://dummyjson.com/users/search?q=${searchValue}`,
-    );
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    const data = await res.json();
-
-    setSearchedUsers(data.users);
-  };
+  const [searchedUsers, setSearchedUsers] = useState<Users>([]);
 
   useEffect(() => {
-    searchValue ? fetchUsers() : setSearchedUsers([]);
+    if (searchValue) {
+      fetch(`https://dummyjson.com/users/search?q=${searchValue}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Failed to fetch data');
+          }
+          return res.json();
+        })
+        .then((data) => setSearchedUsers(data.users));
+    } else {
+      setSearchedUsers([]);
+    }
   }, [searchValue]);
 
   return (
@@ -30,7 +28,7 @@ export const SearchWidget = () => {
         type="text"
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value.trimStart())}
-        placeholder="Search user"
+        placeholder="Search users"
       />
       {searchValue ? (
         <div className="absolute top-[110%] w-2/5 bg-slate-400 z-50 rounded-lg max-h-52 overflow-y-scroll p-5 flex flex-col gap-2">
@@ -39,7 +37,7 @@ export const SearchWidget = () => {
               <SearchedUser key={user.id} user={user} />
             ))
           ) : (
-            <p>User not found!</p>
+            <p>Users not found!</p>
           )}
         </div>
       ) : null}
