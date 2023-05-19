@@ -1,12 +1,17 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
+import Link from 'next/link';
+import { MainLayout } from '@/components/layout/MainLayout';
 
-const inter = Inter({ subsets: ["latin"] });
-
-export default function Home() {
+const Home = () => {
   return (
-    <main>
-      <p>Hello world</p>
-    </main>
+    <MainLayout>
+      <Link
+        href="/users/1"
+        className="text-center w-full block text-8xl hover:text-teal-300 mt-24"
+      >
+        Go to users
+      </Link>
+    </MainLayout>
   );
-}
+};
+
+export default Home;
