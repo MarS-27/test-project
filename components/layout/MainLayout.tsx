@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { ReactNode } from 'react';
-import { Header } from '../components/ui/Header';
+import { Header } from './Header';
 
 type Props = {
   children?: ReactNode;
 };
 
-export const Layout: FC<Props> = ({ children }) => {
+export const MainLayout: FC<Props> = ({ children }) => {
   return (
     <>
       <Header />

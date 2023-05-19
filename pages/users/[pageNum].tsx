@@ -4,11 +4,16 @@ import { SearchWidget } from '@/components/ui/SearchWidget';
 import { Users } from '@/types/types';
 import { UserCard } from '@/components/ui/UserCard';
 import { GetServerSideProps } from 'next';
-import { Layout } from '@/layout/Layout';
+import { MainLayout } from '@/components/layout/MainLayout';
 
-type UsersListProps = { users: Users; pageNum: number };
+type UsersListProps = {
+  users: Users;
+  pageNum: number;
+};
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<UsersListProps> = async (
+  ctx,
+) => {
   const { query } = ctx;
 
   const pageNum = parseInt(query.pageNum as string);
@@ -31,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 const UsersList: FC<UsersListProps> = ({ users, pageNum }) => {
   return (
-    <Layout>
+    <MainLayout>
       <section className="grid-content flex flex-col justify-between gap-14 text-stone-800">
         <SearchWidget />
         <div className="grid grid-cols-5 gap-3 max-[880px]:grid-cols-4 max-sm:grid-cols-2">
@@ -41,7 +46,7 @@ const UsersList: FC<UsersListProps> = ({ users, pageNum }) => {
         </div>
         <Pagination activePageNumber={pageNum} />
       </section>
-    </Layout>
+    </MainLayout>
   );
 };
 

@@ -2,13 +2,15 @@ import { FC } from 'react';
 import Image from 'next/image';
 import { UserInfo } from '@/types/types';
 import { GetServerSideProps } from 'next';
-import { Layout } from '@/layout/Layout';
+import { MainLayout } from '@/components/layout/MainLayout';
 
 type UserPageProps = {
   user: UserInfo;
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<UserPageProps> = async (
+  ctx,
+) => {
   const { query } = ctx;
 
   const res = await fetch(`https://dummyjson.com/users/${query.userId}`);
@@ -25,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 const UserPage: FC<UserPageProps> = ({ user }) => {
   return (
-    <Layout>
+    <MainLayout>
       <section className="grid-content py-5 text-stone-800 mx-auto gap-10 flex justify-center items-center text-2xl max-[980px]:flex-col max-sm:text-lg">
         <Image
           src={user.image}
@@ -53,7 +55,7 @@ const UserPage: FC<UserPageProps> = ({ user }) => {
           </p>
         </div>
       </section>
-    </Layout>
+    </MainLayout>
   );
 };
 

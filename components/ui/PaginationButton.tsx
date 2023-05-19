@@ -1,15 +1,16 @@
 import { FC } from 'react';
-import clsx from 'clsx';
 import Link from 'next/link';
 
 type BtnProps = {
   variant: 'next' | 'prev';
   activePageNumber: number;
+  pagesCount: number;
 };
 
 export const PaginationButton: FC<BtnProps> = ({
   variant,
   activePageNumber,
+  pagesCount,
 }) => {
   return (
     <Link
@@ -18,16 +19,17 @@ export const PaginationButton: FC<BtnProps> = ({
           ? `/users/${activePageNumber - 1}`
           : `/users/${activePageNumber + 1}`
       }
-      className={clsx(
-        'w-10 h-7 border-2 border-gray-700 bg-[url("/arrow.svg")] bg-center bg-cover rounded-full hover:bg-teal-300',
-        variant === 'next' ? 'rotate-180' : null,
-        variant === 'prev' && activePageNumber === 1
-          ? 'pointer-events-none'
-          : null,
-        variant === 'next' && activePageNumber === 10
-          ? 'pointer-events-none'
-          : null,
-      )}
-    />
+      passHref
+    >
+      <button
+        disabled={
+          (variant === 'prev' && activePageNumber === 1) ||
+          (variant === 'next' && activePageNumber === pagesCount)
+        }
+        className="w-8 h-8 border-2 border-gray-700 bg-neutral-300 font-black enabled:hover:bg-teal-300 disabled:bg-neutral-50 disabled:border-gray-400 disabled:text-gray-400"
+      >
+        {variant === 'prev' ? '-' : '+'}
+      </button>
+    </Link>
   );
 };

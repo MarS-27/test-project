@@ -27,7 +27,7 @@ export const SearchWidget = () => {
         className=" w-2/5 p-2 border-slate-700 border-2 rounded-lg bg-slate-100 outline-cyan-500 placeholder:text-stone-500"
         type="text"
         value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value.trimStart())}
+        onChange={(e) => setSearchValue(e.target.value.trim())}
         placeholder="Search users"
       />
       {searchValue ? (
