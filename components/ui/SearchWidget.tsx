@@ -3,39 +3,37 @@ import { Users } from '@/types/types';
 import { SearchedUser } from './SearchedUser';
 import { useDebounceValue } from '@/hooks/debounce';
 
-type Cache = {
-  [key: string]: Users;
-};
+const usersCache: Record<string, Users> = {};
 
 export const SearchWidget = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [cachedUsers, setCachedUsers] = useState<Cache>({});
+  const [searchedUsers, setSearchedUsers] = useState<Users>([]);
 
   const debouncedValue = useDebounceValue(searchValue, 500);
-
-  const handleBlur = () => {
-    setSearchValue('');
-    setCachedUsers({});
-  };
 
   useEffect(() => {
     const controller = new AbortController();
 
-    if (!cachedUsers[debouncedValue] && debouncedValue) {
-      fetch(`https://dummyjson.com/users/search?q=${searchValue}`, {
-        signal: controller.signal,
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Failed to fetch data');
-          }
-          return res.json();
+    if (debouncedValue) {
+      if (!usersCache[debouncedValue]) {
+        fetch(`https://dummyjson.com/users/search?q=${searchValue}`, {
+          signal: controller.signal,
         })
-        .then((data) => {
-          setCachedUsers({ ...cachedUsers, [debouncedValue]: data.users });
-        });
-    } else if (!debouncedValue) {
-      setCachedUsers({});
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Failed to fetch data');
+            }
+            return res.json();
+          })
+          .then((data) => {
+            usersCache[debouncedValue] = data.users;
+            setSearchedUsers(data.users);
+          });
+      } else {
+        setSearchedUsers(usersCache[debouncedValue]);
+      }
+    } else {
+      usersCache[''] = [];
     }
 
     return () => controller.abort();
@@ -48,13 +46,12 @@ export const SearchWidget = () => {
         type="text"
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value.trim())}
-        onBlur={handleBlur}
         placeholder="Search users"
       />
       {debouncedValue ? (
         <div className="absolute top-[110%] w-2/5 bg-slate-400 z-50 rounded-lg max-h-52 overflow-y-scroll p-5 flex flex-col gap-2">
-          {cachedUsers[debouncedValue]?.length ? (
-            cachedUsers[debouncedValue].map((user) => (
+          {searchedUsers.length ? (
+            searchedUsers.map((user) => (
               <SearchedUser key={user.id} user={user} />
             ))
           ) : (
