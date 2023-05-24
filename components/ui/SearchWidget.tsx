@@ -3,11 +3,13 @@ import { Users } from '@/types/types';
 import { SearchedUser } from './SearchedUser';
 import { useDebounceValue } from '@/hooks/debounce';
 
-const usersCache: Record<string, Users> = {};
+const usersCache: Record<string, Users> = {
+  '': [],
+};
 
 export const SearchWidget = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [searchedUsers, setSearchedUsers] = useState<Users>([]);
+  const [selectedUsers, setSelectedUsers] = useState<Users>([]);
 
   const debouncedValue = useDebounceValue(searchValue, 500);
 
@@ -27,13 +29,13 @@ export const SearchWidget = () => {
           })
           .then((data) => {
             usersCache[debouncedValue] = data.users;
-            setSearchedUsers(data.users);
+            setSelectedUsers(data.users);
           });
       } else {
-        setSearchedUsers(usersCache[debouncedValue]);
+        setSelectedUsers(usersCache[debouncedValue]);
       }
     } else {
-      usersCache[''] = [];
+      setSelectedUsers(usersCache['']);
     }
 
     return () => controller.abort();
@@ -50,8 +52,8 @@ export const SearchWidget = () => {
       />
       {debouncedValue ? (
         <div className="absolute top-[110%] w-2/5 bg-slate-400 z-50 rounded-lg max-h-52 overflow-y-scroll p-5 flex flex-col gap-2">
-          {searchedUsers.length ? (
-            searchedUsers.map((user) => (
+          {selectedUsers.length ? (
+            selectedUsers.map((user) => (
               <SearchedUser key={user.id} user={user} />
             ))
           ) : (
