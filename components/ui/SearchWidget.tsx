@@ -1,25 +1,45 @@
 import { useEffect, useState } from 'react';
 import { Users } from '@/types/types';
 import { SearchedUser } from './SearchedUser';
+import { useDebounceValue } from '@/hooks/debounce';
+
+const usersCache: Record<string, Users> = {
+  '': [],
+};
 
 export const SearchWidget = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [searchedUsers, setSearchedUsers] = useState<Users>([]);
+  const [selectedUsers, setSelectedUsers] = useState<Users>([]);
+
+  const debouncedValue = useDebounceValue(searchValue, 500);
 
   useEffect(() => {
-    if (searchValue) {
-      fetch(`https://dummyjson.com/users/search?q=${searchValue}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Failed to fetch data');
-          }
-          return res.json();
+    const controller = new AbortController();
+
+    if (debouncedValue) {
+      if (!usersCache[debouncedValue]) {
+        fetch(`https://dummyjson.com/users/search?q=${searchValue}`, {
+          signal: controller.signal,
         })
-        .then((data) => setSearchedUsers(data.users));
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Failed to fetch data');
+            }
+            return res.json();
+          })
+          .then((data) => {
+            usersCache[debouncedValue] = data.users;
+            setSelectedUsers(data.users);
+          });
+      } else {
+        setSelectedUsers(usersCache[debouncedValue]);
+      }
     } else {
-      setSearchedUsers([]);
+      setSelectedUsers(usersCache['']);
     }
-  }, [searchValue]);
+
+    return () => controller.abort();
+  }, [debouncedValue]);
 
   return (
     <div className="flex justify-center items-center relative">
@@ -30,10 +50,10 @@ export const SearchWidget = () => {
         onChange={(e) => setSearchValue(e.target.value.trim())}
         placeholder="Search users"
       />
-      {searchValue ? (
+      {debouncedValue ? (
         <div className="absolute top-[110%] w-2/5 bg-slate-400 z-50 rounded-lg max-h-52 overflow-y-scroll p-5 flex flex-col gap-2">
-          {searchedUsers.length ? (
-            searchedUsers.map((user) => (
+          {selectedUsers.length ? (
+            selectedUsers.map((user) => (
               <SearchedUser key={user.id} user={user} />
             ))
           ) : (
