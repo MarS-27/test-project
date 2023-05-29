@@ -62,3 +62,6 @@ export type UserInfo = {
 };
 
 export type Users = UserInfo[];
+
+export type SortOrder = 'desc' | 'asc';
+export type SortBy = 'id' | 'name' | 'age' | 'weight' | 'height';

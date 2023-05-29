@@ -9,6 +9,12 @@ export const Navigation = () => {
       <Link href="/users/1" className="hover:text-teal-300">
         USERS
       </Link>
+      <Link
+        href="/table?sortBy=id&sortOrder=asc"
+        className="hover:text-teal-300"
+      >
+        TABLE
+      </Link>
     </nav>
   );
 };
