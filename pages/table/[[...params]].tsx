@@ -1,10 +1,10 @@
 import { MainLayout } from '@/components/layout/MainLayout';
 import { GetServerSideProps } from 'next';
 import { Users, SortBy, SortOrder } from '@/types/types';
-import { useState, useEffect, FC } from 'react';
+import { useState, FC } from 'react';
 import { sortUsers } from '@/utils/sortUsers';
 import Link from 'next/link';
-import { SortSVG } from '@/components/ui/SortSVG';
+import SortSVG from '@/public/sort.svg';
 
 type UsersTableProps = {
   users: Users;
@@ -37,17 +37,15 @@ export const getServerSideProps: GetServerSideProps<UsersTableProps> = async (
 };
 
 const Table: FC<UsersTableProps> = ({ users, sortOrder, sortBy }) => {
-  const [sortedUsers, setSortedUsers] = useState<Users>([]);
+  const [sortedUsers, setSortedUsers] = useState<Users>(users);
 
-  useEffect(() => {
-    if (sortOrder === 'asc' && sortBy === 'id') {
-      setSortedUsers(users);
-    } else if (sortOrder === 'desc') {
-      setSortedUsers(sortUsers(users, sortBy));
-    } else if (sortOrder === 'asc') {
-      setSortedUsers([...sortedUsers].reverse());
+  const handleUsersSort = (param: SortBy) => {
+    if ((sortOrder === 'asc' && param === sortBy) || param !== sortBy) {
+      setSortedUsers(sortUsers(users, param));
+    } else {
+      setSortedUsers(sortedUsers.reverse());
     }
-  }, [sortOrder, sortBy]);
+  };
 
   return (
     <MainLayout>
@@ -65,10 +63,11 @@ const Table: FC<UsersTableProps> = ({ users, sortOrder, sortBy }) => {
                     href={`/table?sortBy=${param}&sortOrder=${
                       sortOrder === 'asc' || sortBy !== param ? 'desc' : 'asc'
                     }`}
+                    onClick={() => handleUsersSort(param as SortBy)}
                     className="flex gap-1 items-center hover:text-teal-300 cursor-pointer fill-current"
                   >
                     <span className="uppercase">{param}</span>
-                    <SortSVG />
+                    <SortSVG className="w-4 h-4" />
                   </Link>
                 </th>
               ))}
