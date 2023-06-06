@@ -30,7 +30,10 @@ export const getServerSideProps: GetServerSideProps<UsersListProps> = async (
   const data = await res.json();
 
   return {
-    props: { users: data.users, pageNum },
+    props: {
+      users: data.users,
+      pageNum,
+    },
   };
 };
 
