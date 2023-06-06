@@ -27,10 +27,13 @@ export const getServerSideProps: GetServerSideProps<UsersListProps> = async (
     throw new Error('Failed to fetch data');
   }
 
-  const users = await res.json();
+  const data = await res.json();
 
   return {
-    props: { ...users, pageNum },
+    props: {
+      users: data.users,
+      pageNum,
+    },
   };
 };
 

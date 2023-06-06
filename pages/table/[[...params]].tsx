@@ -25,13 +25,13 @@ export const getServerSideProps: GetServerSideProps<UsersTableProps> = async (
     throw new Error('Failed to fetch data');
   }
 
-  const users = await res.json();
+  const data = await res.json();
 
   return {
     props: {
-      ...users,
-      sortOrder: query.sortOrder,
-      sortBy: query.sortBy,
+      users: data.users,
+      sortOrder: query.sortOrder as SortOrder,
+      sortBy: query.sortBy as SortBy,
     },
   };
 };
