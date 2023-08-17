@@ -65,3 +65,20 @@ export type Users = UserInfo[];
 
 export type SortOrder = 'desc' | 'asc';
 export type SortBy = 'id' | 'name' | 'age' | 'weight' | 'height';
+
+type RatingInfo = {
+  rate: number;
+  count: number;
+};
+
+export type ProductInfo = {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+  rating: RatingInfo;
+};
+
+export type Products = ProductInfo[];
